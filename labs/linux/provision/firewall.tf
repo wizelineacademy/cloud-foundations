@@ -8,5 +8,18 @@ resource "google_compute_firewall" "allow-inbound" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags = ["web"]
+  target_tags = ["web-server"]
+}
+
+resource "google_compute_firewall" "allow-time" {
+  name    = "allow-time"
+  network = "default"
+
+  allow {
+    protocol = "udp"
+    ports    = ["123"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags = ["ntp"]
 }

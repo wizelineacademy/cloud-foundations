@@ -5,19 +5,20 @@ data "google_compute_image" "image_os" {
 
 resource "google_compute_instance" "default" {
   count        = "${var.instance_count}"
-  name         = "test-${count.index}"
+  name         = "lab-machine-${count.index}"
   machine_type = "f1-micro"
   zone         = "us-west1-b"
 
 
-  tags = ["web-server"]
+  tags = ["web-server", "ntp"]
 
   boot_disk {
     initialize_params {
       image = "${data.google_compute_image.image_os.self_link}"
+      size  = "${var.disk_size}"
     }
   }
-  metadata_startup_script = "sudo yum install docker -y && systemctl enable --now docker.service"
+  metadata_startup_script = "sudo yum install docker ntp -y && systemctl start docker.service ntpd.service"
   network_interface {
     network = "default"
 

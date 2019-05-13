@@ -2,7 +2,7 @@ resource "google_dns_record_set" "web-app" {
   count =  "${var.instance_count}"
   name  = "web-${count.index}.${google_dns_managed_zone.cloud.dns_name}"
   type  = "A"
-  ttl   = 300
+  ttl   = "${var.ttl}"
 
   managed_zone = "${google_dns_managed_zone.cloud.name}"
 
@@ -12,4 +12,8 @@ resource "google_dns_record_set" "web-app" {
 resource "google_dns_managed_zone" "cloud" {
   name     = "wizeline-dev"
   dns_name = "cloud.wizeline.dev."
+}
+
+output "dns" {
+ value = "${google_dns_record_set.web-app.*.name}"
 }

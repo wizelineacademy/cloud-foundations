@@ -11,7 +11,8 @@ echo $COUNT
 
 pushd keys
 for x in $(seq 0 $COUNT); do
-  ssh-keygen -t rsa -f "${RSA_FILENAME}-${x}" -q -N "" -b 2048 -y
+  echo y | ssh-keygen -t rsa -f "${RSA_FILENAME}-${x}" -q -N "" -b 2048 -C "academy@wizeline"
   openssl rsa -in "${RSA_FILENAME}-${x}" -outform pem >"${RSA_FILENAME}-${x}.pem"
+  echo "${RSA_FILENAME}-${x}:$(cat ${RSA_FILENAME}-${x}.pub)" >>../gcloud-ssh
 done
 popd
